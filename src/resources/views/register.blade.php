@@ -77,11 +77,13 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" name="is_admin" value="0">
                  <div class="form__button">
                     <button class="form__button-submit" type="submit">登録</button>
                 </div>
             </form>
+            <div class="login__link">
+                <a class="login__button-submit" href="/login">ログインはこちら</a>
+            </div>
         </div>
     </main>
 </body>

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\AdminRequest;
 
 
 class AdminController extends Controller
@@ -18,7 +18,7 @@ class AdminController extends Controller
     }
 
     //追加機能
-    public function store(RegisterRequest $request)
+    public function store(AdminRequest $request)
 
     {
         $data = $request->validated();
@@ -31,7 +31,7 @@ class AdminController extends Controller
         'name' => $request->name, 
         'email' => $request->email, 
         'password' => Hash::make($request->password),
-        'is_admin' => true,
+        'is_admin' => 1,
         ]);
 
         Auth::login($user);

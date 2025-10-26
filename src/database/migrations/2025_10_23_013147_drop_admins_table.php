@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::dropIfExists('admins'); // ← 消したいテーブル名
+        Schema::dropIfExists('admins');
     }
 
     public function down(): void
