@@ -9,17 +9,81 @@
 <body>
     <header class="header">
         <div class="header__inner">
-            <a class="header__logo" herf="/">
+            <a class="header__logo" href="/">
                 <img class="img_logo" src="{{asset('storage/img/logo.svg')}}"alt="logo">
             </a>
         </div>
-    </header>  
+        <nav class="header__nav">
+            @auth
+            <li class="header__nav-item">
+                    <form class="header__form" action="/logout" method="post">
+                        @csrf
+                        <button class="header__link button--link" type="submit">ログアウト</button>
+                    </form>
+                </li>
+            @endauth
+</nav>
+    </header>
 
     <main>
-        <div class="register-form__content">
-            <div class="register-form__heading">
-                <h2>会員登録</h2>
+        <div class="attendance-form__content">
+            <div class="attendance-form__status">
+                @switch($status)
+                    @case(0)
+                        <p>出勤中</p>
+                        @break
+
+                    @case(1)
+                        <p>休憩中</p>
+                        @break
+
+                     @case(3)
+                        <p>退勤済</p>
+                        @break   
+
+                    @default
+                        <p>出勤外</p>
+                @endswitch
+            </div>    
+
+            <div class="attendance-form__heading">
+                <p>{{ $today }}</p>
             </div>
+
+            <div class='attendance-form__time'>
+                <h2>{{ $totime }}</h2>
+            </div>
+            
+            <div class="attendance-form__button">
+                @switch($status)
+                    @case(0)
+                    <form action="{{ route('attendances.clockout') }}" method="POST" style="display:inline-block;">
+                        @csrf
+                        <button type="submit" class="clockout_button">退勤</button>
+                    </form>
+                    <form action="{{ route('breaktime.breakin') }}" method="POST" style="display:inline-block; margin-left:8px;">
+                        @csrf
+                        <button type="submit" class="breakin_button">休憩入</button>
+                    </form>
+                    @break
+
+                    @case(1)
+                    <form action="{{ route('breaktime.breakout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="breakout_button">休憩戻</button>
+                    </form>
+                    @break
+
+                    @case(3)
+                        <p>お疲れさまでした。</p>
+                    @break
+
+                    @default
+                    <form action="{{ route('attendances.clockin') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="clockin_button">出勤</button>
+                    </form>
+                @endswitch
         </div>
     </main>
 </body>

@@ -17,7 +17,7 @@ class LoginController extends Controller
         $credentials=$request->only('email', 'password');
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
-            return redirect()->route('items.index', ['tab' => 'mylist']);
+            return redirect()->route('attendance.index');
         }
     
         return back()->withErrors([
