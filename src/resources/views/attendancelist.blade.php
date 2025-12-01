@@ -28,10 +28,41 @@
     </header>
 
     <main>
-        <div class="register-form__content">
-            <div class="register-form__heading">
+        <div class="attendancelist-form__content">
+            <div class="attendancelist-form__heading">
                 <h2>勤怠一覧</h2>
             </div>
+            <table>
+                <tr>
+                    <th>日付</th>
+                    <th>出勤</th>
+                    <th>退勤</th>
+                    <th>休憩</th>
+                    <th>合計</th>
+                    <th>詳細</th>
+                </tr>
+                @foreach ($days as $day)
+                    @php
+                        $dateKey = $day->format('Y-m-d');
+                        $attendance = $attendances[$dateKey] ?? null;
+                    @endphp
+                    
+                    <tr>
+                        <td>{{ $day->locale('ja')->isoFormat('M/D(ddd)') }}</td>
+                        <td>
+                            @if ($attendance)
+                               {{ $attendance->start_time->format('H:i') }}
+                            @endif
+                        </td>
+                        <td>
+                            @if ($attendance)
+                               {{ $attendance->end_time->format('H:i') }}
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+
+            </table>
         </div>
     </main>
 </body>

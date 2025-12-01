@@ -33,8 +33,8 @@ Route::post('/break-in',  [BreakTimeController::class, 'breakIn'])->name('breakt
 Route::post('/break-out', [BreakTimeController::class, 'breakOut'])->name('breaktime.breakout');
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-});
 
 Route::get('/attendance/list', [AttendanceListController::class,'index'])->name('attendancelist.index');
+});
 
 Route::get('/admin/attendance/list', [AdminAttendanceListController::class,'index'])->name('admin.attendancelist.index');
