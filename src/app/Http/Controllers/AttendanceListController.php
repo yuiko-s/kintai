@@ -10,6 +10,10 @@ class AttendanceListController extends Controller
 {
     public function index()
     {  
+        Carbon::setLocale('ja');
+
+        $user = Auth::user();
+        
     //①カレンダー
         $today = Carbon::now();      
         $year = $today->year;

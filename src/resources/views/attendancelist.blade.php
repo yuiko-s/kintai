@@ -50,9 +50,10 @@
                 <th>詳細</th>
             </tr>
             <tr>
+                
                 @foreach($days as $day)
-                <tr>    
-                    <td>{{$day ->format('d')}}</td>
+                <tr> 
+                    <td>{{$day ->isoFormat('MM/DD(ddd)')}}</td>
                 </tr>
                 @endforeach
             </tr>
