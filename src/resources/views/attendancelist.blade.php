@@ -53,12 +53,25 @@
                 
                 @foreach($days as $day)
                 <tr> 
-                    <td>{{$day ->isoFormat('MM/DD(ddd)')}}</td>
+                    <td>{{$day ->isoformat('MM/DD(ddd)')}}</td>
+               
+                    <td>{{$attendance?->start_time?->format('H:i') ?? '-'}}</td>
+
+                    <td>{{$attendance?->end_time?->format('H:i') ?? '-'}}</td>
+
+                    <td>{{$breaktime?->format('H:i') ?? '-'}}</td>
+
+                    <td>{{$total?->format('H:i') ?? '-'}}</td>
+
                 </tr>
                 @endforeach
+
+                
+                    
             </tr>
         </table>
 
     </div>
 </main>
-</head>
+</body>
+</html>

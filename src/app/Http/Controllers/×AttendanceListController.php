@@ -62,7 +62,7 @@ class AttendanceListController extends Controller
             if ($attendance->start_time && $attendance->end_time) {
             $workedMinutes = $attendance->start_time->diffInMinutes($attendance->end_time);
             }
-
+ 
 
             $actualWorkedMinutes = max($workedMinutes - $totalBreakMinutes, 0);
             
