@@ -10,6 +10,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\BreakTimeController;
 
 
+
 Route::get('/register', [RegisterController::class,'register'])->name('register');
 Route::post('/register', [RegisterController::class,'store'])->name('register.store');
 
@@ -35,6 +36,12 @@ Route::post('/break-out', [BreakTimeController::class, 'breakOut'])->name('break
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/attendance/list', [AttendanceListController::class,'index'])->name('attendancelist.index');
+
+Route::get('/attendance/detail/create', [AttendanceListController::class,'add'])->name('attendancedetail.add');
+Route::post('/attendance/detail/create', [AttendanceListController::class,'create'])->name('attendancedetail.create');
+Route::get('/attendance/detail/{id}', [AttendanceListController::class,'detail'])->name('attendancedetail.detail');
+Route::post('/attendance/detail/{id}', [AttendanceListController::class,'update'])->name('attendancedetail.update');
+
 });
 
 Route::get('/admin/attendance/list', [AdminAttendanceListController::class,'index'])->name('admin.attendancelist.index');

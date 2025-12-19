@@ -33,11 +33,11 @@
         </div>
 
         <tr>
-                <a>←</a>
+                <a href="{{ route('attendancelist.index', ['month' => $today->copy()->subMonth()->format('Y-m')]) }}">←</a>
                 <td>{{$today->copy()->subMonth()->format('Y/m');}}</td>
                 <td>{{$today->format('Y/m');}}</td>
                 <td>{{$today->copy()->addMonth()->format('Y/m');}}</td>
-                <a>→</a>
+                <a href="{{ route('attendancelist.index', ['month' => $today->copy()->addMonth()->format('Y-m')]) }}">→</a>
 
             </tr>
         <table>
@@ -62,6 +62,15 @@
                     <td>{{$breaktime?->format('H:i') ?? '-'}}</td>
 
                     <td>{{$total?->format('H:i') ?? '-'}}</td>
+
+                    <td>
+                        @if($attendance)
+                            <a href="{{ route('attendancedetail.detail', ['id' => $attendance->id]) }}">詳細</a>
+                        @else
+                            <a href="{{ route('attendancedetail.create') }}">詳細</a>
+                        @endif
+                    </td>
+
 
                 </tr>
                 @endforeach

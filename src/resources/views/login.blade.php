@@ -17,7 +17,7 @@
     <main>
         <div class="login-form__content">
             <div class="login-form__heading">
-                <!-- THIS IS LOGIN PAGE -->
+                
                 <h2>ログイン</h2>
             </div>
             <form class="form" action="/login" method="post">
