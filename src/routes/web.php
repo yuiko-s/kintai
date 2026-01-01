@@ -36,6 +36,7 @@ Route::post('/break-out', [BreakTimeController::class, 'breakOut'])->name('break
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/attendance/list', [AttendanceListController::class,'index'])->name('attendancelist.index');
+Route::post('/attendance/list', [AttendanceListController::class,'update'])->name('attendancelist.update');
 
 Route::get('/attendance/detail/create', [AttendanceListController::class,'add'])->name('attendancedetail.add');
 Route::post('/attendance/detail/create', [AttendanceListController::class,'create'])->name('attendancedetail.create');

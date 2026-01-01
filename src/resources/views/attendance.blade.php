@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>勤怠登録画面</title>
-    
+    <title>勤怠</title>
+    <link rel="stylesheet" href="css/sanitize.css">
+    <link rel="stylesheet" href="css/attendance.css">
+    <link rel="stylesheet" href="css/attendancelist.css">
+    @yield('css')
 </head>
 <body>
     <header class="header">
@@ -14,15 +17,25 @@
             </a>
         </div>
         <nav class="header__nav">
-            @auth
-            <li class="header__nav-item">
+            <ul class="header__nav-list">
+                @auth
+                <li class="header__nav-item">
+                    <a class="header__link" href="{{ route('attendance.index') }}">勤怠</a>
+                </li>
+                <li class="header__nav-item">
+                    <a class="header__link" href="{{ route('attendancelist.index') }}">勤怠一覧</a>
+                </li>
+                
+
+                 <li class="header__nav-item">
                     <form class="header__form" action="/logout" method="post">
                         @csrf
-                        <button class="header__link button--link" type="submit">ログアウト</button>
+                        <a class="header__link button--link" type="submit">ログアウト</a>
                     </form>
                 </li>
             @endauth
-</nav>
+        </ul>
+    </nav>
     </header>
 
     <main>
@@ -84,6 +97,7 @@
                         <button type="submit" class="clockin_button">出勤</button>
                     </form>
                 @endswitch
+            </div>
         </div>
     </main>
 </body>

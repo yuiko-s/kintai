@@ -29,105 +29,53 @@ class AttendanceListController extends Controller
         $endOfMonth   = $startOfMonth->copy()->endOfMonth();
 
     //日付
-        $cursor = $startOfMonth->copy();
-        while($cursor <= $endOfMonth){
-            $days[] = $cursor->copy();
-            $cursor->addDay();
+        $day = $startOfMonth->copy();
+        while($day <= $endOfMonth){
+            $days[] = $day->copy();
+            $day->addDay();
         }
 
         
 
-    //出勤データ取得
-    $rows = []; 
-    foreach($days as $day){
-        $dateKey = $day->format('Y-m-d');
-        $attendance = Attendance::where('user_id',$user->id)
-            ->whereDate('start_time', $day->format('Y-m-d')) ->first();
-
-        if($attendance){
-        if($attendance->start_time && $attendance->end_time){
-        $worktime =  $attendance->start_time->diffInMinutes($attendance->end_time);
-        } else {
-            
-            $worktime = null;
-        }
-    }else{
-        $worktime = null;
-    }
-
-
-    //休憩
-    $breakMinutes = 0;
-    if($attendance){
-        $breakstart = Breaktime::where('attendance_id',$attendance->id)
-            ->whereDate('break_start', $day->format('Y-m-d')) ->first();
-            
-        
-        $breakend = Breaktime::where('attendance_id',$attendance->id)
-            ->whereDate('break_end', $day->format('Y-m-d')) ->first();
-            } else {    
-                $breakstart = null;
-                $breakend = null;
-            }
-    
-        if ($breakstart && $breakend) {
-        $breakMinutes = $breakend->break_end->diffInMinutes($breakstart->break_start);
-        } else {
-
-        $breakMinutes = 0;
-
-        }
-
-        //合計時間
-        $total = $worktime - $breakMinutes;
-        $total = Carbon::createFromTime(0,0)->addMinutes($total);
-    }
-        
+       //一日の出勤データ取得
+       $date = $startOfMonth;
+       $attendance = Attendance::where('user_id', $user->id)
+            ->whereDate('start_time' , $date)
+            ->first();
        
+        //休憩時間合計
+        $breakTimes = $attendance ? $attendance->breakTimes : collect();
+
+        $breakMinutes = $breakTimes->sum(fn($break) =>
+        $break->break_start ? $break->break_start->diffInMinutes($break->break_end) : 0
+);
 
 
-    return view('attendancelist',
+        //実働時間
+        $workMinutes = 0;
+
+        if ($attendance && $attendance->start_time && $attendance->end_time) {
+            $worked = $attendance->start_time->diffInMinutes($attendance->end_time);
+            $workMinutes = max(0, $worked - $breakMinutes);
+        }
+
+        
+
+            
+       return view('attendancelist',
     ['today' => $today,
      'day' => $day,
      'days' => $days,
      'year' => $year,
      'month' => $month,
      'attendance' => $attendance,
+     'breakTimes' => $breakTimes,
      'breakMinutes' => $breakMinutes,
-     'total' => $total
-    ]);
-    }
+     'workMinutes' => $workMinutes
+     ]
+);
 
-    //追加登録ページ
-    public function add()
-    {
-        return view('attendancedetailcreate');
-    }
-
-    //追加機能
-    public function create(Request $request){
-        $user = Auth::user();
-        $attendance = Attendance::create([
-        'user_id'    => $user->id,
-        'start_time' => $request->start_time
-            ? Carbon::parse($request->work_date.' '.$request->start_time)
-            : null,
-        'end_time'   => $request->end_time
-            ? Carbon::parse($request->work_date.' '.$request->end_time)
-            : null,
-        'note'       => $request->note ?? null,
-    ]);
-
-    if ($request->break_start && $request->break_end) {
-        BreakTime::create([
-            'attendance_id' => $attendance->id,
-            'break_start'   => Carbon::parse($request->work_date.' '.$request->break_start),
-            'break_end'     => Carbon::parse($request->work_date.' '.$request->break_end),
-            ]);
-        }
-        return redirect()->route('attendancelist.index');
-    }
-
+    }   
     //詳細ページ表示
     public function detail($id){
         $attendance = Attendance::find($id);
@@ -149,4 +97,3 @@ class AttendanceListController extends Controller
         return redirect()->route('attendancelist.index');   
     }
 }
-

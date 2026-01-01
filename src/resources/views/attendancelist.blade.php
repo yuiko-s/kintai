@@ -59,9 +59,14 @@
 
                     <td>{{$attendance?->end_time?->format('H:i') ?? '-'}}</td>
 
-                    <td>{{$breaktime?->format('H:i') ?? '-'}}</td>
+                    <td>{{$breakMinutes
+                        ? sprintf('%02d:%02d', intdiv($breakMinutes, 60), $breakMinutes % 60)
+                        : '-' }}</td>
 
-                    <td>{{$total?->format('H:i') ?? '-'}}</td>
+                    <td>{{ $workMinutes
+                        ? sprintf('%02d:%02d', intdiv($workMinutes,60), $workMinutes%60)
+                        : '-' }}</td>
+
 
                     <td>
                         @if($attendance)
