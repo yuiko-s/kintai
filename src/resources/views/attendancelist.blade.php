@@ -52,6 +52,12 @@
             <tr>
                 
                 @foreach($days as $day)
+                @php
+                    $key = $day->toDateString();
+                    $attendance = $attendanceByDate[$key] ?? null;
+                    $breakMinutes = $breakMinutesByDate[$key] ?? 0;
+                    $workMinutes = $workMinutesByDate[$key] ?? 0;
+                @endphp
                 <tr> 
                     <td>{{$day ->isoformat('MM/DD(ddd)')}}</td>
                
@@ -69,11 +75,11 @@
 
 
                     <td>
-                        @if($attendance)
+                         @if($attendance) 
                             <a href="{{ route('attendancedetail.detail', ['id' => $attendance->id]) }}">詳細</a>
-                        @else
-                            <a href="{{ route('attendancedetail.create') }}">詳細</a>
-                        @endif
+                         @else 
+                             <a href="{{ route('attendancedetail.create') }}">詳細</a> 
+                         @endif 
                     </td>
 
 

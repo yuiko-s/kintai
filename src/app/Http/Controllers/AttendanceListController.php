@@ -36,19 +36,28 @@ class AttendanceListController extends Controller
         }
 
         
+        $attendanceByDate = [];
+        $breakMinutesByDate = [];
+        $workMinutesByDate = [];
 
+        foreach ($days as $date) {
+        $key = $date->toDateString();
+        
        //一日の出勤データ取得
-       $date = $startOfMonth;
-       $attendance = Attendance::where('user_id', $user->id)
+       
+        $attendance = Attendance::where('user_id', $user->id)
             ->whereDate('start_time' , $date)
             ->first();
        
+        $attendanceByDate[$key] = $attendance;
+            
         //休憩時間合計
         $breakTimes = $attendance ? $attendance->breakTimes : collect();
 
         $breakMinutes = $breakTimes->sum(fn($break) =>
-        $break->break_start ? $break->break_start->diffInMinutes($break->break_end) : 0
+        ($break->break_start && $break->break_end) ? $break->break_start->diffInMinutes($break->break_end) : 0
 );
+        $breakMinutesByDate[$key] = max(0, $breakMinutes);
 
 
         //実働時間
@@ -58,21 +67,23 @@ class AttendanceListController extends Controller
             $worked = $attendance->start_time->diffInMinutes($attendance->end_time);
             $workMinutes = max(0, $worked - $breakMinutes);
         }
-
-        
-
-            
-       return view('attendancelist',
-    ['today' => $today,
-     'day' => $day,
-     'days' => $days,
-     'year' => $year,
-     'month' => $month,
-     'attendance' => $attendance,
-     'breakTimes' => $breakTimes,
-     'breakMinutes' => $breakMinutes,
-     'workMinutes' => $workMinutes
-     ]
+   
+        $workMinutesByDate[$key] = $workMinutes;
+        }
+        return view('attendancelist',
+        ['today' => $today,
+        'day' => $day,
+        'days' => $days,
+        'year' => $year,
+        'month' => $month,
+        'attendanceByDate' => $attendanceByDate,
+        'breakMinutesByDate' => $breakMinutesByDate,
+        'workMinutesByDate' => $workMinutesByDate,
+        'attendance' => $attendance,
+        'breakTimes' => $breakTimes,
+        'breakMinutes' => $breakMinutes,
+        'workMinutes' => $workMinutes
+        ]
 );
 
     }   
@@ -80,8 +91,13 @@ class AttendanceListController extends Controller
     public function detail($id){
         $attendance = Attendance::find($id);
         if ($attendance) {
+            $breakTimes = $attendance->breakTimes()->take(2)->get();
+            while ($breakTimes->count() < 2) {
+            $breakTimes->push(new \App\Models\BreakTime());
+    }
         return view('attendancedetail', [
-            'attendance' => $attendance
+            'attendance' => $attendance,
+            'breakTimes' => $breakTimes,
         ]);
         } else {
         return redirect()->route('attendancedetail.create');

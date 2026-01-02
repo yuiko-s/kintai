@@ -44,10 +44,10 @@
                         <div class="text">
                             <p>{{ $attendance?->start_time?->format('m月d日') ?? '-' }}</p>
                         </div>
-                    <div class="form__group-content">
-                        <div class="form__input--text">
+                    {{-- <div class="form__group-content"> 
+                         <div class="form__input--text"> 
                             <input type="text" name="start_time" value="{{$attendance?->start_time?->format('m月d日') ?? '-'}}"/>
-                        </div>
+                        </div> --}}
                     <div class="form__group-title">
                         <span class="form__label--item">出勤・退勤</span>
                     </div>
@@ -63,18 +63,16 @@
                         <span class="form__label--item">休憩</span>
                     </div>
                     <div class="form__group-content">
+                         @foreach($breakTimes as $breakTime)
                         <div class="form__input--text">
-                            <input type="text" name="break_start" value="{{$breaktime?->break_start?->format('H:i') ?? ''}}"/>
+                            <input type="text" name="break_start[]" value="{{ $breakTime->break_start?->format('H:i') ?? '' }}">
                         </div>
-                         <div class="form__group-content">
+                        <div class="form__group-content">
                         <div class="form__input--text">
-                            <input type="text" name="break_end" value="{{$breaktime?->break_end?->format('H:i') ?? ''}}"/>
+                            <input type="text" name="break_end[]" value="{{ $breakTime->break_end?->format('H:i') ?? '' }}">
                         </div>
-            
-                         <div class="form__group-content">
-                        <div class="form__input--text">
-                            <input type="text" name="break_end" value="{{$breaktime?->break_end?->format('H:i') ?? ''}}"/>
-                        </div>
+                        @endforeach
+                        
                     <div class="form__group-title">
                         <span class="form__label--item">備考</span>
                     </div>
