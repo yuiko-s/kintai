@@ -1,26 +1,65 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理者一覧</title>
-    
-</head>
-<body>
-    <header class="header">
-        <div class="header__inner">
-            <a class="header__logo" href="/">
-                <img class="img_logo" src="{{asset('storage/img/logo.svg')}}"alt="logo">
-            </a>
-        </div>
-    </header>  
-    <main>
-        <div class="register-form__content">
-            <div class="register-form__heading">
-                <h2>管理者一覧</h2>
-            </div>
-        </div>
-    </main>
-</body>
+@extends('layouts.app')
 
-</html>
+@section('css')
+<link rel="stylesheet" href="{{ asset('css/attendance.css') }}">
+@endsection
+
+@section('content')
+<div class="adminattendancelist-form__content">
+  <div class="adminattendancelist-form__heading">
+    <h2>勤怠一覧</h2>
+  </div>
+
+  
+  <div class="adminattendancelist-date-nav">
+    <a href="{{ route('adminattendancelist.index', ['day' => $today->copy()->subDay()->format('Y-m-d')]) }}">←</a>
+    <span>{{ $today->format('Y/m/d') }}</span>
+    <a href="{{ route('adminattendancelist.index', ['day' => $today->copy()->addDay()->format('Y-m-d')]) }}">→</a>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>名前</th>
+        <th>出勤</th>
+        <th>退勤</th>
+        <th>休憩</th>
+        <th>合計</th>
+        <th>詳細</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @foreach($attendances as $attendance)
+        @php
+          $key = $attendance->id;
+          $breakMinutes = $breakMinutesByAttendanceId[$key] ?? 0;
+          $workMinutes  = $workMinutesByAttendanceId[$key] ?? 0;
+        @endphp
+
+        <tr>
+          <td>{{ $attendance->user->name ?? '-' }}</td>
+          <td>{{ $attendance?->start_time?->format('H:i') ?? '-' }}</td>
+          <td>{{ $attendance?->end_time?->format('H:i') ?? '-' }}</td>
+
+          <td>
+            {{ $breakMinutes
+                ? sprintf('%02d:%02d', intdiv($breakMinutes,60), $breakMinutes%60)
+                : '-' }}
+          </td>
+
+          <td>
+            {{ $workMinutes
+                ? sprintf('%02d:%02d', intdiv($workMinutes,60), $workMinutes%60)
+                : '-' }}
+          </td>
+
+          <td>
+            <a href="{{ route('attendancedetail.detail', ['id' => $attendance->id]) }}">詳細</a>
+          </td>
+        </tr>
+      @endforeach
+    </tbody>
+  </table>
+</div>
+@endsection

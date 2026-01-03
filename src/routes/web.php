@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminAttendanceListController;
 use App\Http\Controllers\AttendanceListController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\BreakTimeController;
+use App\Http\Controllers\RequestController;
 
 
 
@@ -43,6 +44,8 @@ Route::post('/attendance/detail/create', [AttendanceListController::class,'creat
 Route::get('/attendance/detail/{id}', [AttendanceListController::class,'detail'])->name('attendancedetail.detail');
 Route::post('/attendance/detail/{id}', [AttendanceListController::class,'update'])->name('attendancedetail.update');
 
+Route::get('/stamp_correction_request/list', [RequestController::class,'index'])->name('request.index');
+
+Route::get('/admin/attendance/list', [AdminAttendanceListController::class,'index'])->name('adminattendancelist.index');
 });
 
-Route::get('/admin/attendance/list', [AdminAttendanceListController::class,'index'])->name('admin.attendancelist.index');
