@@ -7,6 +7,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AdminAttendanceListController;
 use App\Http\Controllers\AttendanceListController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\BreakTimeController;
 use App\Http\Controllers\RequestController;
 
@@ -21,7 +22,8 @@ Route::post('/admin', [AdminController::class,'store'])->name('admin.store');
 Route::get('/login', [LoginController::class,'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.store');
 
-
+Route::get('/admin/login', [AdminLoginController::class,'index'])->name('adminlogin');
+Route::post('/admin/login', [AdminLoginController::class, 'login'])->name('adminlogin.store');
 
 Route::middleware('auth')->group(function () {
 
@@ -35,6 +37,7 @@ Route::post('/break-in',  [BreakTimeController::class, 'breakIn'])->name('breakt
 Route::post('/break-out', [BreakTimeController::class, 'breakOut'])->name('breaktime.breakout');
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/adminlogout', [AdminLoginController::class, 'logout'])->name('adminlogout');
 
 Route::get('/attendance/list', [AttendanceListController::class,'index'])->name('attendancelist.index');
 Route::post('/attendance/list', [AttendanceListController::class,'update'])->name('attendancelist.update');

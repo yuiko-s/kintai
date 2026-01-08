@@ -18,7 +18,6 @@
   </div>
 
   <table>
-    <thead>
       <tr>
         <th>名前</th>
         <th>出勤</th>
@@ -27,9 +26,7 @@
         <th>合計</th>
         <th>詳細</th>
       </tr>
-    </thead>
 
-    <tbody>
       @foreach($attendances as $attendance)
         @php
           $key = $attendance->id;
@@ -38,7 +35,7 @@
         @endphp
 
         <tr>
-          <td>{{ $attendance->user->name ?? '-' }}</td>
+          <td>{{ $attendance->user?->name ?? '-' }}</td>
           <td>{{ $attendance?->start_time?->format('H:i') ?? '-' }}</td>
           <td>{{ $attendance?->end_time?->format('H:i') ?? '-' }}</td>
 
@@ -59,7 +56,7 @@
           </td>
         </tr>
       @endforeach
-    </tbody>
+   
   </table>
 </div>
 @endsection
