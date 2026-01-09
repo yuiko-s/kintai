@@ -47,8 +47,16 @@ Route::post('/attendance/detail/create', [AttendanceListController::class,'creat
 Route::get('/attendance/detail/{id}', [AttendanceListController::class,'detail'])->name('attendancedetail.detail');
 Route::post('/attendance/detail/{id}', [AttendanceListController::class,'update'])->name('attendancedetail.update');
 
+Route::get('/admin/attendance/list', [AdminAttendanceListController::class,'index'])->name('adminattendancelist.index');
+
+Route::get('/admin/attendance/{id}', [AdminAttendanceListController::class,'detail'])->name('adminattendance.detail');
+Route::post('/admin/attendance/{id}', [AdminAttendanceListController::class,'update'])->name('adminattendance.update');
+
+
+
+
 Route::get('/stamp_correction_request/list', [RequestController::class,'index'])->name('request.index');
 
-Route::get('/admin/attendance/list', [AdminAttendanceListController::class,'index'])->name('adminattendancelist.index');
+
 });
 

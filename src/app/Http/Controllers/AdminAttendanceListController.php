@@ -51,4 +51,29 @@ class AdminAttendanceListController extends Controller
     ]);
 }
 
+//詳細ページ表示
+    public function detail($id){
+        $attendance = Attendance::find($id);
+        if ($attendance) {
+            $breakTimes = $attendance->breakTimes()->take(2)->get();
+            while ($breakTimes->count() < 2) {
+            $breakTimes->push(new \App\Models\BreakTime());
+    }
+        return view('adminattendance', [
+            'attendance' => $attendance,
+            'breakTimes' => $breakTimes,
+        ]);
+        } else {
+        return redirect()->route('adminattendancelist.index');
+        }
+    }
+
+    //更新機能
+    public function update(Request $request)
+    {
+        $form = $request->all();
+        unset($form['_token']);
+        Attendance::find($request->id)->update($form);
+        return redirect()->route('adminattendancelist.index');   
+    }
 }

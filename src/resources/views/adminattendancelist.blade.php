@@ -52,7 +52,7 @@
           </td>
 
           <td>
-            <a href="{{ route('attendancedetail.detail', ['id' => $attendance->id]) }}">詳細</a>
+            <a href="{{ route('adminattendance.detail', ['id' => $attendance->id]) }}">詳細</a>
           </td>
         </tr>
       @endforeach
