@@ -18,7 +18,7 @@
         <div class="login-form__content">
             <div class="login-form__heading">
                 
-                <h2>ログイン</h2>
+                <h2>管理者ログイン</h2>
             </div>
             <form class="form" action="{{route('adminlogin.store')}}" method="post">
                 @csrf

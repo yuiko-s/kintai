@@ -10,6 +10,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\BreakTimeController;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\AdminStaffListController;
+use App\Http\Controllers\AdminAttendanceStaffController;
 
 
 
@@ -51,6 +53,10 @@ Route::get('/admin/attendance/list', [AdminAttendanceListController::class,'inde
 
 Route::get('/admin/attendance/{id}', [AdminAttendanceListController::class,'detail'])->name('adminattendance.detail');
 Route::post('/admin/attendance/{id}', [AdminAttendanceListController::class,'update'])->name('adminattendance.update');
+
+Route::get('/admin/staff/list', [AdminStaffListController::class,'index'])->name('adminstafflist.index');
+
+Route::get('/admin/attendance/staff/{user}', [AdminAttendanceStaffController::class,'index'])->name('adminattendancestaff.index');
 
 
 
