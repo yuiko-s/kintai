@@ -12,9 +12,12 @@
 
   
   <div class="adminattendancelist-date-nav">
-    <a href="{{ route('adminattendancelist.index', ['day' => $today->copy()->subDay()->format('Y-m-d')]) }}">←</a>
-    <span>{{ $today->format('Y/m/d') }}</span>
-    <a href="{{ route('adminattendancelist.index', ['day' => $today->copy()->addDay()->format('Y-m-d')]) }}">→</a>
+    <a href="{{ route('adminattendancelist.index', ['day'=>$today->copy()->subDay()->format('Y-m-d')]) }}">←前日</a>
+    <td>{{$today->copy()->subDay()->format('Y/m');}}</td>
+    <td>{{$today->format('Y/m/d')}}</td>
+    <td>{{$today->copy()->addDay()->format('Y/m');}}</td>
+    <a href="{{ route('adminattendancelist.index', ['day' => $today->copy()->addDay()->format('Y-m-d')]) }}">翌日→</a>
+
   </div>
 
   <table>

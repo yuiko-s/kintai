@@ -15,6 +15,7 @@ use App\Http\Controllers\AdminAttendanceStaffController;
 
 
 
+
 Route::get('/register', [RegisterController::class,'register'])->name('register');
 Route::post('/register', [RegisterController::class,'store'])->name('register.store');
 

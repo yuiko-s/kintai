@@ -33,11 +33,11 @@
         </div>
 
         <tr>
-                <a href="{{ route('adminattendancestaff.index',['user' => $user->id], ['month' => $today->copy()->subMonth()->format('Y-m')]) }}">←</a>
+                <a href="{{ route('adminattendancestaff.index',['user' => $user->id,'month' => $today->copy()->subMonth()->format('Y-m')]) }}">←</a>
                 <td>{{$today->copy()->subMonth()->format('Y/m');}}</td>
                 <td>{{$today->format('Y/m');}}</td>
                 <td>{{$today->copy()->addMonth()->format('Y/m');}}</td>
-                <a href="{{ route('adminattendancestaff.index',['user' => $user->id], ['month' => $today->copy()->addMonth()->format('Y-m')]) }}">→</a>
+                <a href="{{ route('adminattendancestaff.index', ['user' => $user->id,'month' => $today->copy()->addMonth()->format('Y-m')]) }}">→</a>
 
             </tr>
         <table>
@@ -49,7 +49,6 @@
                 <th>合計</th>
                 <th>詳細</th>
             </tr>
-            <tr>
                 
                 @foreach($days as $day)
                 @php
@@ -85,12 +84,11 @@
 
                 </tr>
                 @endforeach
-
                 
-                    
-            </tr>
         </table>
-
+        <div class="form__button">
+            <button class="form__button-submit" type="submit">CSV出力</button>
+        </div>
     </div>
 </main>
 </body>

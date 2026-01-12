@@ -16,6 +16,10 @@ class AdminAttendanceListController extends Controller
     Carbon::setLocale('ja');
 
     $today = Carbon::today(); 
+    $dayParam = $request->query('day');
+    $today = $dayParam
+        ? Carbon::createFromFormat('Y-m-d', $dayParam)
+        : Carbon::today();
 
     
     $attendances = Attendance::with(['user', 'breakTimes'])
