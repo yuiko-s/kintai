@@ -1,20 +1,10 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理者ログイン</title>
-    
-</head>
-<body>
-    <header class="header">
-        <div class="header__inner">
-            <a class="header__logo" href="/">
-                <img class="img_logo" src="{{asset('storage/img/logo.svg')}}"alt="logo">
-            </a>
-        </div>
-    </header>
-    <main>
+@extends('layouts.loginapp')
+
+@section('css')
+<link rel="stylesheet" href="{{asset('css/attendance.css')}}">
+@endsection
+
+@section('content')
         <div class="login-form__content">
             <div class="login-form__heading">
                 
@@ -57,6 +47,4 @@
                 </div>
             </form>
         </div>
-    </main>
-</body>
-</html>
+@endsection

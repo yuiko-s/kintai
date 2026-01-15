@@ -25,7 +25,7 @@
                         <a class="header__link" href="{{ route('attendancelist.index') }}">今月の勤怠一覧</a>
                     </li>
                     <li class="header__nav-item">
-                        <a class="header__link" href="{{ route('attendancelist.index') }}">勤怠一覧</a>
+                        <a class="header__link" href="{{ route('request.index') }}">申請一覧</a>
                     </li>
                     <li class="header__nav-item">
                         <a href="#" class="header__link"
