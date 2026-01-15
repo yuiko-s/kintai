@@ -48,7 +48,11 @@ class AttendanceController extends Controller
         $today = $now->isoFormat('YYYY年MM月DD日(ddd)');
         $totime = $now->format('H:i');
 
-        return view('attendance',compact('today','totime','status'));
+        return view('attendance',[
+        'today' => $today,
+        'totime' => $totime,
+        'status' => $status,
+        'attendance' => $attendance]);
     }
 
     //出勤打刻

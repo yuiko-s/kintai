@@ -47,7 +47,7 @@ class AdminAttendanceListController extends Controller
         $workMinutesByAttendanceId[$attendance->id] = $workMinutes;
     }
 
-    return view('admin.attendance.list', [
+    return view('adminattendancelist', [
         'today' => $today,
         'attendances' => $attendances,
         'breakMinutesByAttendanceId' => $breakMinutesByAttendanceId,
@@ -75,9 +75,42 @@ class AdminAttendanceListController extends Controller
     //更新機能
     public function update(Request $request)
     {
-        $form = $request->all();
-        unset($form['_token']);
-        Attendance::find($request->id)->update($form);
-        return redirect()->route('adminattendancelist.index');   
+
+        $attendance = Attendance::findOrFail($request->id);
+
+        
+        $base = $attendance->start_time->format('Y-m-d');
+        $attendance->start_time = $base . ' ' . $request->start_time;
+        $attendance->end_time   = $base . ' ' . $request->end_time;
+        $attendance->save();
+        
+        BreakTime::where('attendance_id', $attendance->id)->delete();
+
+        $breakStarts = $request->input('break_start', []);
+        $breakEnds   = $request->input('break_end', []);
+
+        for ($i = 0; $i < count($breakStarts); $i++) {
+        $bs = $breakStarts[$i] ?? null;
+        $be = $breakEnds[$i] ?? null;
+
+        if (!$bs && !$be) continue;
+
+        $break = new BreakTime();
+        $break->attendance_id = $attendance->id;
+        $break->user_id       = $attendance->user_id;
+        $break->break_start   = $bs ? ($base . ' ' . $bs) : null;
+        $break->break_end     = $be ? ($base . ' ' . $be) : null;
+        $break->save();
     }
+
+        $attendance->approvals()->create([
+            'user_id'       => $attendance->user_id,
+            'attendance_id' => $attendance->id,
+            'status'        => 'pending',
+            'remarks'       => $request->input('remarks'),
+        ]);
+
+
+        return redirect()->route('adminattendancelist.index');
+}
 }

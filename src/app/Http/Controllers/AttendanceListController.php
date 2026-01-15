@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\ApprovalRequest;
 use App\Models\Attendance;
 use App\Models\BreakTime;
+use App\Models\Approval;
 use Carbon\Carbon;
+
 
 class AttendanceListController extends Controller
 {
@@ -89,6 +93,8 @@ class AttendanceListController extends Controller
     }   
     //詳細ページ表示
     public function detail($id){
+        
+        
         $attendance = Attendance::find($id);
         if ($attendance) {
             $breakTimes = $attendance->breakTimes()->take(2)->get();
@@ -98,6 +104,7 @@ class AttendanceListController extends Controller
         return view('attendancedetail', [
             'attendance' => $attendance,
             'breakTimes' => $breakTimes,
+            'approval'   => $attendance->approvals()->latest()->first(),
         ]);
         } else {
         return redirect()->route('attendancedetail.create');
@@ -105,11 +112,44 @@ class AttendanceListController extends Controller
     }
 
     //更新機能
-    public function update(Request $request)
+    public function update(ApprovalRequest $request)
     {
-        $form = $request->all();
-        unset($form['_token']);
-        Attendance::find($request->id)->update($form);
-        return redirect()->route('attendancelist.index');   
+
+        $attendance = Attendance::findOrFail($request->id);
+
+        
+        $base = $attendance->start_time->format('Y-m-d');
+        $attendance->start_time = $base . ' ' . $request->start_time;
+        $attendance->end_time   = $base . ' ' . $request->end_time;
+        $attendance->save();
+        
+        BreakTime::where('attendance_id', $attendance->id)->delete();
+
+        $breakStarts = $request->input('break_start', []);
+        $breakEnds   = $request->input('break_end', []);
+
+        for ($i = 0; $i < count($breakStarts); $i++) {
+        $bs = $breakStarts[$i] ?? null;
+        $be = $breakEnds[$i] ?? null;
+
+        if (!$bs && !$be) continue;
+
+        $break = new BreakTime();
+        $break->attendance_id = $attendance->id;
+        $break->user_id       = $attendance->user_id;
+        $break->break_start   = $bs ? ($base . ' ' . $bs) : null;
+        $break->break_end     = $be ? ($base . ' ' . $be) : null;
+        $break->save();
     }
+
+        $attendance->approvals()->create([
+        'user_id'       => $attendance->user_id,
+        'attendance_id' => $attendance->id,
+        'status'        => 'pending',
+        'remarks'       => $request->input('remarks'),
+    ]);
+
+        return redirect()->route('attendancelist.index');
+}
+
 }

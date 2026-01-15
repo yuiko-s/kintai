@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\BreakTime; 
+use App\Models\Approval;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -34,6 +35,10 @@ class Attendance extends Model
     {
         return $this->hasMany(BreakTime::class);
     }
-
+    
+    public function approvals()
+    {
+        return $this->hasMany(Approval::class);
+    }
     
 }
