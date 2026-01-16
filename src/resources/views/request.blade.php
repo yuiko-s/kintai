@@ -39,6 +39,10 @@
                     {{ $approval->status === 'pending' ? '承認待ち' : '承認済み' }}
                 </td>
 
+                {{-- 名前 --}}
+                <td>
+                    {{ $approval->attendance?->user?->name ?? '-' }}
+
                 {{-- 対象日 --}}
                 <td>
                     {{ $approval->attendance?->start_time?->format('Y/m/d') ?? '-' }}
