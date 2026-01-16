@@ -1,0 +1,3 @@
+# MySQL data volume (DO NOT COMMIT)
+docker/mysql/data/
+
